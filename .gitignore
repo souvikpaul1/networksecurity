@@ -1,2 +1,6 @@
 .env
 networksecurity.egg-info/
+
+logs/
+Network_data/
+notebooks/

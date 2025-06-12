@@ -35,13 +35,47 @@ Create a __init__.py file under all subfolders of networksecurity
 
 5. Create the logging and exception Module
 
+6. ETL Pipeline
+
+Source to extract:
+APIs
+S3 Bucket
+Paid APIs
+
+Transform:
+Basic Preprocessing
+json
+
+Load:
+MongoDB --> Atlas cloud
+AWS Dynamdb
+SQL
+S3 Bucket
+
+7. setup MongoDB connections
+push_data.py
+keep the mongoDB url in .env variable and dont push it to github
+pushed from csv to mongoDB --> 11055 records
+
+DATABASE="network_security"
+COLLECTION_NAME="network_data"
 
 
-12/6: 277 --> 283
+
+12/6: 277 --> 283 Project Setup, mongoDB setup, ETL pipeline (csv to mongoDB json) - complete
 13/6: 284 --> 288 ( Data ingestion + Data validation)
-14/6a: 289 --> 292 DT and Model Trainer
-14/6b: 293 --> 297
-15/6a: 298 --> 301
-15/6b: CV 3 projects
-16/6
-17/6
+14/6a: 289 --> 292 (DT, Model Trainer, model evaluation with HP) --> morning
+14/6b: 293 --> 297 (Exp tracking, model pusher, MT pipeline, Batch prediction Pipeline) --> afternoon
+14/6c: 298 --> 301 (Push to AWS S3, Docker image, github action to ECR, final to EC2) --> evening
+15/6: CV + 3 projects github
+16/6: plan for Next 80 days
+17/6: Pack
+18/6: Sneho + Joi
+-------------------
+
+3 mlops project
+Revised till ML 
+Revised AWS 
+Planned for projects 
+CV version 3 ready
+------------------
