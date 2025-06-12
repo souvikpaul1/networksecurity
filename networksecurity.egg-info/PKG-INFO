@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: networksecurity
+Version: 0.0.1
+Summary: This is e2e ML ops project
+Author: Souvik Paul
+Requires-Dist: python-dotenv
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: pymongo
+Requires-Dist: certifi
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary

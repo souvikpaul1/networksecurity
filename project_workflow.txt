@@ -1,8 +1,8 @@
 
-conda create -n network_security python==3.10 
-conda activate network_security
+1. conda create -n network_security python==3.10 
+    conda activate network_security
 
-create project structure 
+2.  create project structure 
     -   .github/workflow/main.yaml for deployment
     -   Network_data for storing the Network_data
     -   networksecurity
@@ -25,3 +25,23 @@ create project structure
     -   setup.py
 
 Create a __init__.py file under all subfolders of networksecurity
+
+3. Create the setup.py file
+    - All the packages should be build before the execution of the project
+
+4. do pip install -r requirements.txt
+    -   This will install all the packages mentioned in the requirements file
+    - This help in packaging the entire project
+
+5. Create the logging and exception Module
+
+
+
+12/6: 277 --> 283
+13/6: 284 --> 288 ( Data ingestion + Data validation)
+14/6a: 289 --> 292 DT and Model Trainer
+14/6b: 293 --> 297
+15/6a: 298 --> 301
+15/6b: CV 3 projects
+16/6
+17/6

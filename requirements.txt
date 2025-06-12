@@ -1,3 +1,7 @@
 python-dotenv
 pandas
 numpy
+pymongo
+certifi
+
+#-e . if you want to uncomment and run it will automatically trigger the setup.py and the entire package for this project will be created.
