@@ -6,6 +6,15 @@ create project structure
     -   .github/workflow/main.yaml for deployment
     -   Network_data for storing the Network_data
     -   networksecurity
+            -cloud
+            -components
+            -constants
+            -entity
+            -exception
+            -logging
+            -pipeline
+            -utils
+            
     - notebooks
     -   .env
     -   .gitignore
@@ -14,3 +23,5 @@ create project structure
     -   README.md
     -   requirements.txt
     -   setup.py
+
+Create a __init__.py file under all subfolders of networksecurity
