@@ -1,0 +1,16 @@
+
+conda create -n network_security python==3.10 
+conda activate network_security
+
+create project structure 
+    -   .github/workflow/main.yaml for deployment
+    -   Network_data for storing the Network_data
+    -   networksecurity
+    - notebooks
+    -   .env
+    -   .gitignore
+    -   DockerFile
+    -   project_workflow.txt
+    -   README.md
+    -   requirements.txt
+    -   setup.py
