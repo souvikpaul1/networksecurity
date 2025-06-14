@@ -71,6 +71,10 @@ create the data_ingestion.py
     - 
 
 
+9. Data validation
+lecture - 287 (notes 4:00)
+
+
 
 12/6: 277 --> 283 Project Setup, mongoDB setup, ETL pipeline (csv to mongoDB json) - COMPLETE
 13/6: 284 --> 288 ( Data ingestion + Data validation)

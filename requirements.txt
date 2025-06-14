@@ -1,9 +1,11 @@
 python-dotenv
 pandas
 numpy
-pymongo[srv]
 pymongo
 certifi
 scikit-learn
+dill
+scipy
+pyaml
 
 #-e . if you want to uncomment and run it will automatically trigger the setup.py and the entire package for this project will be created.
