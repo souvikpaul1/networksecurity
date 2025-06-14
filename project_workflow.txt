@@ -60,9 +60,19 @@ pushed from csv to mongoDB --> 11055 records
 DATABASE="network_security"
 COLLECTION_NAME="network_data"
 
+8. Data ingestion 
+lecture - 286 insert diagram in readme (7:58)
+create config_entity
+add Data Ingestion related constant
+create the data_ingestion.py
+
+    - export_collection_as_dataframe (mondoDB to DF)
+    - export_data_into_feature_store ( save from DF to feature store so that everytime we dont take from mongoDB)
+    - 
 
 
-12/6: 277 --> 283 Project Setup, mongoDB setup, ETL pipeline (csv to mongoDB json) - complete
+
+12/6: 277 --> 283 Project Setup, mongoDB setup, ETL pipeline (csv to mongoDB json) - COMPLETE
 13/6: 284 --> 288 ( Data ingestion + Data validation)
 14/6a: 289 --> 292 (DT, Model Trainer, model evaluation with HP) --> morning
 14/6b: 293 --> 297 (Exp tracking, model pusher, MT pipeline, Batch prediction Pipeline) --> afternoon

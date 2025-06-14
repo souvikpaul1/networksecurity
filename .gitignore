@@ -4,3 +4,5 @@ networksecurity.egg-info/
 logs/
 Network_data/
 notebooks/
+Artifacts/
+test.py
