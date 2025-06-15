@@ -73,6 +73,22 @@ create the data_ingestion.py
 
 9. Data validation
 lecture - 287 (notes 4:00)
+This data validation is slightly different from vehicle insurance
+we are checking the data drift between train and test df and comparing with threshold
+check code once, not appropriate
+
+10. Data Transformation
+KNN imputer, read data from Data ingestion artifact, in vehicle insurance it was read in that way, could had been read from data validation artifact also.
+
+11. Model Trainer:
+-
+- add mflow to track experiments
+- add dagshub in model_trainer (Collaborative Environment) 
+        - Dagshub is a remote repor + DVC + experiment tracking
+- 
+
+
+
 
 
 

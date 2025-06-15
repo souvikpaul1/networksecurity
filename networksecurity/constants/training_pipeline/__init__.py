@@ -3,6 +3,10 @@ import sys
 import numpy as np
 import pandas as pd
 
+
+
+
+
 """
 Defining common constant variables for the training pipeline.
 """
@@ -34,5 +38,34 @@ DATA_VALIDATION_VALID_DIR: str = "validated"
 DATA_VALIDATION_INVALID_DIR: str = "invalid"
 DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report"
 
+
 SCHEMA_FILE_PATH = os.path.join("data_schema", "schema.yaml")
+
+"""
+Data Transformation ralated constant start with DATA_TRANSFORMATION VAR NAME
+"""
+DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"
+DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR: str = "transformed"
+DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_object"
+PREPROCESSING_OBJECT_FILE_NAME: str = "preprocessing.pkl"
+
+## KNN Imputer to replace NAN values
+DATA_TRANSFORMATION_IMPUTER_PARAMS: dict = {
+    "missing_values": np.nan,
+    "n_neighbors": 3,
+    "weights":"uniform",
+
+}
+"""
+Model Trainer related constant start with MODEL_TRAINER VAR NAME
+"""
+
+MODEL_TRAINER_DIR_NAME: str = "model_trainer"
+MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
+MODEL_TRAINER_TRAINED_FILE_NAME: str = "model.pkl"
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
+MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD: float = 0.05
+SAVED_MODEL_DIR=os.path.join("saved_models")
+MODEL_FILE_NAME: str = "model.pkl"
+
 

@@ -86,20 +86,29 @@ def save_object(file_path: str, obj: object) -> None:
         raise NetworkSecurityException(e, sys) from e
 
 
-# def drop_columns(df: DataFrame, cols: list)-> DataFrame:
+def evaluate_models(x_train: DataFrame, y_train: DataFrame, x_test: DataFrame, y_test: DataFrame, model,param) -> float:
+    """
+    Evaluate the model using the training and testing data.
+    Returns the accuracy score of the model.
+    """
+    try:
+       report = {}
+       for i in range(len(list(model))):
+            model=list(model.values())[i]
+            para=param[list(model.keys())[i]]
 
-#     """
-#     drop the columns form a pandas DataFrame
-#     df: pandas DataFrame
-#     cols: list of columns to be dropped
-#     """
-#     logging.info("Entered drop_columns methon of utils")
+            gs=GridSearchCV(model,para,cv=3,verbose=2,n_jobs=-1)
+            gs.fit(x_train,y_train)
 
-#     try:
-#         df = df.drop(columns=cols, axis=1)
+            y_train_pred= gs.predict(x_train)
+            y_test_pred = gs.predict(x_test)
 
-#         logging.info("Exited the drop_columns method of utils")
-        
-#         return df
-#     except Exception as e:
-#         raise NetworkSecurityException(e, sys) from e
+            train_model_score = r2_score(y_train, y_train_pred)
+            test_model_score = r2_score(y_test, y_test_pred)
+
+            report[list(model.keys())[i]] = test_model_score
+
+            return report
+    except Exception as e:
+        raise NetworkSecurityException(e, sys) from e   
+    
