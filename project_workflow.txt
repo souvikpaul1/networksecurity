@@ -83,29 +83,66 @@ KNN imputer, read data from Data ingestion artifact, in vehicle insurance it was
 11. Model Trainer:
 -
 - add mflow to track experiments
-- add dagshub in model_trainer (Collaborative Environment) 
+- add dagshub in model_trainer (Collaborative Environment in remote repo) 
         - Dagshub is a remote repor + DVC + experiment tracking
-- 
+- create training Pipeline
+- Create app.py and create a fastAPI
+
+Issue observed:
+1. connection issue when trying to connect to dagshub
+2. when trying to train via swagger ui failing
+
+12. Push Final Model and Artifact to AWS S3
+    -   Push artifact and model to AWS S3, before that create a bucket
+    - create an IAM user and do AWS configure in terminal
+    - uvicorn app:app --reload
+    - once you trigger train  from swagger UI the new model and artifacts will be created in the bucket.
+
+13. Build Docker Image and Github actions
+
+Industry Standard:
+
+< Network_security API > --> < Docker Image > --> < AWS ECR/dockerhub > ---> < EC2(self hosted runner) >
+< ------------------- C Improvement -----------------C Delivery ----------------Continuous Deployment  >
 
 
+14. Github actions, dcoker image push to AWS ECR
+
+-   Create the docker File
+-   Configure github actions (main.yaml)
+- Create a ECR repo before
+
+Note add these in github secrets:
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_DEFAULT_REGION
+ECR_REPO
+AWS_ECR_LOGIN_URI
 
 
+15. Final deployment to EC2
 
+- Continuous Deployment runs on self hosted i.e EC2
 
-12/6: 277 --> 283 Project Setup, mongoDB setup, ETL pipeline (csv to mongoDB json) - COMPLETE
-13/6: 284 --> 288 ( Data ingestion + Data validation)
-14/6a: 289 --> 292 (DT, Model Trainer, model evaluation with HP) --> morning
-14/6b: 293 --> 297 (Exp tracking, model pusher, MT pipeline, Batch prediction Pipeline) --> afternoon
-14/6c: 298 --> 301 (Push to AWS S3, Docker image, github action to ECR, final to EC2) --> evening
-15/6: CV + 3 projects github
-16/6: plan for Next 80 days
-17/6: Pack
-18/6: Sneho + Joi
--------------------
+Self Hosted: keeps on listening is we are pushing anything in github. It is like a event listener.
 
-3 mlops project
-Revised till ML 
-Revised AWS 
-Planned for projects 
-CV version 3 ready
-------------------
+Summary Table:
+Feature	            Self-Hosted on EC2	    EKS-Based (Kubernetes)
+------------------------------------------------------------------------
+Cost	            Low	                    Higher
+Scalability	        Limited	                High
+Setup complexity	Simple	                Complex
+Resilience	        Manual restart needed	Auto-healing via Kubernetes
+Best for	        MVPs, small apps	    Production-scale ML systems
+
+- Setup EC2 has aself hosted runner:
+    - create a EC2 instance(t2.medium)
+    - connect using EC2 instance connect
+    - Docker command in EC2 setup to be executed
+    - github --> actions --> runners --> new self hosted runner
+    - add the code in EC2 and complete the setup of ec2 self hosted runner.
+    - final command - ./run.sh 
+
+----------------------------------------------------------
+Complete
+----------------------------------------------------------

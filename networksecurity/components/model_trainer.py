@@ -5,7 +5,7 @@ import pandas as pd
 
 import numpy as np
 
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score,r2_score
 
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
@@ -21,65 +21,26 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (AdaBoostClassifier, GradientBoostingClassifier,RandomForestClassifier)
- 
+
+# import dagshub
+# dagshub.init(repo_owner='souvikpaul425', repo_name='networksecurity', mlflow=True)
+
 
 class ModelTrainer:
-    def __init__(self, data_transformation_artifact: DataTransformationArtifact,
-                 model_trainer_config: ModelTrainerConfig):
+    def __init__(self, 
+                 model_trainer_config: ModelTrainerConfig,data_transformation_artifact: DataTransformationArtifact,
+                 ):
         """
         :param data_transformation_artifact: Output reference of data transformation artifact stage
         :param model_trainer_config: Configuration for model training
         """
         try:
-            self.data_transformation_artifact = data_transformation_artifact
             self.model_trainer_config = model_trainer_config
+            self.data_transformation_artifact = data_transformation_artifact
+            
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e
         
-
-    # def get_model_object_and_report(self, train: np.array, test: np.array) -> Tuple[object, object]:
-    #     """
-    #     Method Name :   get_model_object_and_report
-    #     Description :   This function trains a RandomForestClassifier with specified parameters
-        
-    #     Output      :   Returns metric artifact object and trained model object
-    #     On Failure  :   Write an exception log and then raise an exception
-    #     """
-    #     try:
-    #         logging.info("Training RandomForestClassifier with specified parameters")
-
-    #         # Splitting the train and test data into features and target variables
-    #         x_train, y_train, x_test, y_test = train[:, :-1], train[:, -1], test[:, :-1], test[:, -1]
-    #         logging.info("train-test split done.")
-
-    #         # Initialize RandomForestClassifier with specified parameters
-    #         model = RandomForestClassifier(
-    #             n_estimators = self.model_trainer_config._n_estimators,
-    #             min_samples_split = self.model_trainer_config._min_samples_split,
-    #             min_samples_leaf = self.model_trainer_config._min_samples_leaf,
-    #             max_depth = self.model_trainer_config._max_depth,
-    #             criterion = self.model_trainer_config._criterion,
-    #             random_state = self.model_trainer_config._random_state
-    #         )
-
-    #         # Fit the model
-    #         logging.info("Model training going on...")
-    #         model.fit(x_train, y_train)
-    #         logging.info("Model training done.")
-
-    #         # Predictions and evaluation metrics
-    #         y_pred = model.predict(x_test)
-    #         accuracy = accuracy_score(y_test, y_pred)
-    #         f1 = f1_score(y_test, y_pred)
-    #         precision = precision_score(y_test, y_pred)
-    #         recall = recall_score(y_test, y_pred)
-
-    #         # Creating metric artifact
-    #         metric_artifact = ClassificationMetricArtifact(f1_score=f1, precision_score=precision, recall_score=recall)
-    #         return model, metric_artifact
-        
-    #     except Exception as e:
-    #         raise NetworkSecurityException(e, sys) from e
 
     def track_in_mlflow(self, model: object, classification_train_metric: ClassificationMetricArtifact, classification_test_metric: ClassificationMetricArtifact) -> None:
         """
@@ -167,13 +128,25 @@ class ModelTrainer:
         )
 
 
-        best_model_score = max(sorted(model_report.values()))
-        best_model_name=list(model_report.keys())[
-                        list(model_report.values()).index(best_model_score)
+        # best_model_score = max(sorted(model_report.values()))
+        # best_model_name=list(model_report.keys())[
+        #                 list(model_report.values()).index(best_model_score)
                         
-                    ]
+        #             ]
+        best_model_score = max(model_report.values(), key=lambda x: x['test_score'])['test_score']
+        
+        # Find which model gave the best score
+        best_model_name = [
+            model_name
+            for model_name, report in model_report.items()
+            if report['test_score'] == best_model_score
+        ][0]
+
         best_model= models[best_model_name]
         logging.info(f"Best model found: {best_model_name} with score: {best_model_score}")
+        
+        # Fit the best model with the entire training data
+        best_model.fit(x_train, y_train)
 
         y_train_pred = best_model.predict(x_train)
         classification_train_metric=get_classification_score(y_true=y_train, y_pred=y_train_pred)
@@ -194,29 +167,22 @@ class ModelTrainer:
         os.makedirs(model_dir_path, exist_ok=True
                     )
         
-        MyModel = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=best_model)
-        save_object(file_path=self.model_trainer_config.trained_model_file_path, obj=MyModel)
+        model = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=best_model)
+        save_object(file_path=self.model_trainer_config.trained_model_file_path, obj=model)
         logging.info(f"Model {best_model_name} saved successfully at {self.model_trainer_config.trained_model_file_path}")
         logging.info(f"Model {best_model_name} trained and saved successfully.")
 
         save_object("final_models/model.pkl", best_model)
         
-
-
         #model trainer artifact:
         model_trainer_artifact = ModelTrainerArtifact(
             trained_model_file_path=self.model_trainer_config.trained_model_file_path,
-            classification_train_metric=classification_train_metric,
-            classification_test_metric=classification_test_metric
+            train_metric_artifact=classification_train_metric,
+            test_metric_artifact=classification_test_metric
         )
         logging.info(f"Model trainer artifact created: {model_trainer_artifact}")
         return model_trainer_artifact
     
-
-
-
-
-
     def initiate_model_trainer(self) -> ModelTrainerArtifact:
         logging.info("Entered initiate_model_trainer method of ModelTrainer class")
         """
@@ -247,32 +213,7 @@ class ModelTrainer:
             )
             return model_trainer_artifact
             
-            # # Train model and get metrics
-            # trained_model, metric_artifact = self.get_model_object_and_report(train=train_arr, test=test_arr)
-            # logging.info("Model object and artifact loaded.")
             
-            # # Load preprocessing object
-            # preprocessing_obj = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
-            # logging.info("Preprocessing obj loaded.")
-
-            # Check if the model's accuracy meets the expected threshold
-            if accuracy_score(train_arr[:, -1], trained_model.predict(train_arr[:, :-1])) < self.model_trainer_config.expected_accuracy:
-                logging.info("No model found with score above the base score")
-                raise Exception("No model found with score above the base score")
-
-            # Save the final model object that includes both preprocessing and the trained model
-            # logging.info("Saving new model as performace is better than previous one.")
-            # my_model = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=trained_model)
-            # save_object(self.model_trainer_config.trained_model_file_path, my_model)
-            # logging.info("Saved final model object that includes both preprocessing and the trained model")
-
-            # # Create and return the ModelTrainerArtifact
-            # model_trainer_artifact = ModelTrainerArtifact(
-            #     trained_model_file_path=self.model_trainer_config.trained_model_file_path,
-            #     metric_artifact=metric_artifact,
-            # )
-            # logging.info(f"Model trainer artifact: {model_trainer_artifact}")
-            # return model_trainer_artifact
         
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e

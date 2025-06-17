@@ -6,3 +6,5 @@ Network_data/
 notebooks/
 Artifacts/
 test.py
+mlruns/
+
