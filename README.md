@@ -2,7 +2,7 @@
 
 ---
 
-````markdown
+
 # 🔐 Network Security Threat Detection — End-to-End MLOps Project
 
 This repository showcases a **real-world, production-grade MLOps pipeline** built for detecting threats in network traffic. The project integrates the entire ML lifecycle—from **data ingestion and preprocessing** to **model training**, **cloud-based deployment**, and **CI/CD automation**—leveraging both **ML** and **DevOps best practices**.
@@ -29,6 +29,7 @@ Designed to highlight your ability to build scalable, maintainable, and cloud-na
 
 ---
 
+````markdown
 ## 📁 Project Structure
 
 ```text
